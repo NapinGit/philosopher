@@ -37,7 +37,7 @@ void    init_mutex_fork(t_obj *obj)
 
 	i = 0;
     tmp = obj->first;
-	while (i < obj->nb_philo)
+	while (i < obj->param.nb_philo)
 	{
 		tmp->left_fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		if (tmp->left_fork == NULL)
@@ -49,8 +49,9 @@ void    init_mutex_fork(t_obj *obj)
     //la partie en dessous nécesite d'etre testé pour savoir si les fork sont bien attaché les unes au autres
     i = 0;
     tmp = obj->first;
-    while (i < obj->nb_philo)
+    while (i < obj->param.nb_philo)
     {
+        tmp->param = &obj->param;
         if (tmp->next)
         {
             tmp->right_fork = tmp->next->left_fork;
@@ -66,15 +67,20 @@ void    init_philo(t_obj *obj)
     int number;
 
     number = 0;
-    if (number < obj->nb_philo)
+    if (number < obj->param.nb_philo)
     {
         obj->first = ft_philo_new(number + 1);
         number++;
-        while (number < obj->nb_philo)
+        while (number < obj->param.nb_philo)
         {
             ft_philo_add_back(&obj->first, ft_philo_new(number + 1));
             number++;
         }
         init_mutex_fork(obj);
     }
+    obj->param.display = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (obj->param.display == NULL)
+		return ;
+    pthread_mutex_init(obj->param.display, NULL);
+    //param a initialisé sur le display
 }
