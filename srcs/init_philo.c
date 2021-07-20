@@ -11,6 +11,8 @@ t_philosopher	*ft_philo_new(int nb)
     lst->philo_name = nb;
     lst->is_dead = 0;
     lst->time_last_eat = 0;
+    lst->nb_eat = 0;
+    lst->done = 0;
 	return (lst);
 }
 
@@ -34,7 +36,7 @@ void	ft_philo_add_back(t_philosopher **list, t_philosopher *new)
 
 int    init_mutex_fork(t_obj *obj)
 {
-    int i;
+    uint64_t i;
     t_philosopher   *tmp;
 
 	i = 0;
@@ -55,10 +57,8 @@ int    init_mutex_fork(t_obj *obj)
     while (i < obj->param.nb_philo)
     {
         tmp->param = &obj->param;
-        // printf("philo name = %ld i = %d\n", tmp->philo_name, i);
         if (tmp->next)
         {
-            //printf("philo name = %ld\n", tmp->philo_name);
             tmp->right_fork = tmp->next->left_fork;
             tmp = tmp->next;
         }
@@ -71,7 +71,7 @@ int    init_mutex_fork(t_obj *obj)
 
 int    init_philo(t_obj *obj)
 {
-    int number;
+    uint64_t number;
 
     number = 0;
     if (number < obj->param.nb_philo)

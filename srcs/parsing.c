@@ -65,7 +65,7 @@ int parse_int(char **av)
     return (1);
 }
 
-void get_param(t_obj *obj, char **av, int ac)
+int get_param(t_obj *obj, char **av, int ac)
 {
     obj->param.nb_philo = ft_atoi(av[1]);
     obj->param.time_to_die = ft_atoi(av[2]);
@@ -75,4 +75,7 @@ void get_param(t_obj *obj, char **av, int ac)
         obj->param.nb_philo_eat = ft_atoi(av[5]);
     else
         obj->param.nb_philo_eat = -1;
+	if (obj->param.nb_philo == 1 || obj->param.nb_philo > 200)
+		return (0);
+	return (1);
 }
