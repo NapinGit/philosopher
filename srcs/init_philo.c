@@ -9,6 +9,8 @@ t_philosopher	*ft_philo_new(int nb)
 		return (NULL);
 	lst->next = NULL;
     lst->philo_name = nb;
+    lst->is_dead = 0;
+    lst->time_last_eat = 0;
 	return (lst);
 }
 
@@ -30,7 +32,7 @@ void	ft_philo_add_back(t_philosopher **list, t_philosopher *new)
 	}
 }
 
-void    init_mutex_fork(t_obj *obj)
+int    init_mutex_fork(t_obj *obj)
 {
     int i;
     t_philosopher   *tmp;
@@ -41,8 +43,9 @@ void    init_mutex_fork(t_obj *obj)
 	{
 		tmp->left_fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		if (tmp->left_fork == NULL)
-			return ;
-		pthread_mutex_init(tmp->left_fork, NULL);
+			return (0);
+		if (pthread_mutex_init(tmp->left_fork, NULL))
+            return (0);
         tmp = tmp->next;
 		i++;
 	}
@@ -52,17 +55,21 @@ void    init_mutex_fork(t_obj *obj)
     while (i < obj->param.nb_philo)
     {
         tmp->param = &obj->param;
+        // printf("philo name = %ld i = %d\n", tmp->philo_name, i);
         if (tmp->next)
         {
+            //printf("philo name = %ld\n", tmp->philo_name);
             tmp->right_fork = tmp->next->left_fork;
             tmp = tmp->next;
         }
         i++;
     }
+    tmp->param = &obj->param;
     tmp->right_fork = obj->first->left_fork;
+    return (1);
 }
 
-void    init_philo(t_obj *obj)
+int    init_philo(t_obj *obj)
 {
     int number;
 
@@ -76,11 +83,14 @@ void    init_philo(t_obj *obj)
             ft_philo_add_back(&obj->first, ft_philo_new(number + 1));
             number++;
         }
-        init_mutex_fork(obj);
+        if (init_mutex_fork(obj) == 0)
+            return (0);
     }
     obj->param.display = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (obj->param.display == NULL)
-		return ;
-    pthread_mutex_init(obj->param.display, NULL);
+		return (0);
+    if (pthread_mutex_init(obj->param.display, NULL))
+        return (0);
+    return (1);
     //param a initialisé sur le display
 }
