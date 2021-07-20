@@ -39,14 +39,12 @@ typedef struct     s_obj
     struct s_philosopher	*first;
 }                   t_obj;
 
-void	ft_bzero(void *s, size_t n);
-long	ft_atoi(const char *str);
-int		parse_int(char **av);
-int	get_param(t_obj *obj, char **av, int ac);
-int    init_philo(t_obj *obj);
-void	philo_take_fork(t_philosopher *philo);
-void    philo_eat(t_philosopher *philo);
-void    philo_sleep(t_philosopher *philo);
-void    philo_think(t_philosopher *philo);
+void		ft_bzero(void *s, size_t n);
+long		ft_atoi(const char *str);
+int			parse_int(char **av);
+int			get_param(t_obj *obj, char **av, int ac);
+int    		init_philo(t_obj *obj);
+void 		*philo_day(void *phil);
 uint64_t    get_current_time(void);
+void		free_all_philo(t_obj *obj);
 #endif
