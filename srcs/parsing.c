@@ -9,12 +9,12 @@ void	ft_bzero(void *s, size_t n)
 	c = 0;
 	while (i < n)
 	{
-		((unsigned char*)s)[i] = (unsigned char)c;
+		((unsigned char *)s)[i] = (unsigned char)c;
 		i++;
 	}
 }
 
-long		ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int		i;
 	int		sign;
@@ -41,40 +41,37 @@ long		ft_atoi(const char *str)
 	return (result * sign);
 }
 
-int parse_int(char **av)
+int	parse_int(char **av)
 {
-    int i;
-    int k;
+	int	i;
+	int	k;
 
-    k = 1;
-    i = 0;
-    while (av[k])
-    {
-        while (av[k][i])
-        {
-            if (av[k][i] < '0' || av[k][i] > '9')
-            {
-                //printf("char c = %c\n", av[k][i]);
-                return (0);
-            }
-            i++;
-        }
-        i = 0;
-        k++;
-    }
-    return (1);
+	k = 1;
+	i = 0;
+	while (av[k])
+	{
+		while (av[k][i])
+		{
+			if (av[k][i] < '0' || av[k][i] > '9')
+				return (0);
+			i++;
+		}
+		i = 0;
+		k++;
+	}
+	return (1);
 }
 
-int get_param(t_obj *obj, char **av, int ac)
+int	get_param(t_obj *obj, char **av, int ac)
 {
-    obj->param.nb_philo = ft_atoi(av[1]);
-    obj->param.time_to_die = ft_atoi(av[2]);
-    obj->param.time_to_eat = ft_atoi(av[3]);
-    obj->param.time_to_sleep = ft_atoi(av[4]);
-    if (ac == 6)
-        obj->param.nb_philo_eat = ft_atoi(av[5]);
-    else
-        obj->param.nb_philo_eat = -1;
+	obj->param.nb_philo = ft_atoi(av[1]);
+	obj->param.time_to_die = ft_atoi(av[2]);
+	obj->param.time_to_eat = ft_atoi(av[3]);
+	obj->param.time_to_sleep = ft_atoi(av[4]);
+	if (ac == 6)
+		obj->param.nb_philo_eat = ft_atoi(av[5]);
+	else
+		obj->param.nb_philo_eat = -1;
 	if (obj->param.nb_philo == 1 || obj->param.nb_philo > 200)
 		return (0);
 	return (1);

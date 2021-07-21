@@ -1,12 +1,17 @@
 #include "../include/philosopher.h"
 
-
-uint64_t    get_current_time(void)
+uint64_t	get_current_time(void)
 {
 	static struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+}
+
+static void	destroy_fork(t_philosopher	*before)
+{
+	pthread_mutex_destroy(before->left_fork);
+	free(before->left_fork);
 }
 
 void	free_all_philo(t_obj *obj)
@@ -22,20 +27,14 @@ void	free_all_philo(t_obj *obj)
 		tmp = before->next;
 	while (tmp)
 	{
-        if (before->left_fork != NULL)
-        {
-            pthread_mutex_destroy(before->left_fork);
-            free(before->left_fork);
-        }
+		if (before->left_fork != NULL)
+			destroy_fork(before);
 		free(before);
 		before = tmp;
 		tmp = before->next;
 	}
-    if (before->left_fork != NULL)
-    {
-        pthread_mutex_destroy(before->left_fork);
-        free(before->left_fork);
-    }
+	if (before->left_fork != NULL)
+		destroy_fork(before);
 	free(before);
 	free(tmp);
 }
