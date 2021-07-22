@@ -62,6 +62,12 @@ void	*philo_day(void *phil)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)phil;
+	if (philo->param->nb_philo == 1)
+	{
+		usleep(philo->param->time_to_die * 1000);
+		philo->is_dead = 1;
+		return ((void *)0);
+	}
 	while (philo->is_dead == 0)
 	{
 		if (philo->param->nb_philo_eat == philo->nb_eat)
