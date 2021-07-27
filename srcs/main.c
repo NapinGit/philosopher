@@ -6,6 +6,7 @@ static void	start_thread(t_obj *obj)
 
 	obj->param.time_start = get_current_time();
 	tmp = obj->first;
+	printf("dead or not =%d\n", tmp->param->dead_or_not);
 	while (tmp)
 	{
 		pthread_create(&tmp->philo, NULL, &philo_day, tmp);
@@ -14,19 +15,29 @@ static void	start_thread(t_obj *obj)
 	}
 }
 
-void	stop_all_thread(t_obj *obj)
+void	stop_all_thread(t_obj *obj, t_philosopher *die)
 {
 	t_philosopher	*tmp;
 
 	tmp = obj->first;
 	pthread_mutex_lock(obj->param.display);
 	printf("%ld ms : philo %ld is dead\n", get_current_time()
-		- tmp->param->time_start, tmp->philo_name);
+		- tmp->param->time_start, die->philo_name);
+	pthread_mutex_unlock(obj->param.display);
 	while (tmp)
 	{
-		tmp->is_dead = 1;
+		//tmp->is_dead = 1;
+		//pthread_mutex_unlock(tmp->left_fork);
+		//pthread_mutex_unlock(tmp->right_fork);
+		pthread_join(tmp->philo, NULL);
+		
 		tmp = tmp->next;
 	}
+	/*pthread_mutex_lock(obj->param.display);
+	printf("%ld ms : philo %ld is dead\n", get_current_time()
+		- tmp->param->time_start, die->philo_name);
+	pthread_mutex_unlock(obj->param.display);*/
+	//pthread_mutex_unlock(obj->param.display);
 }
 
 int	check_all_stopped(t_obj *obj)
@@ -54,7 +65,8 @@ int	monitor(t_obj *obj)
 		{
 			if (tmp->is_dead == 1)
 			{
-				stop_all_thread(obj);
+				obj->param.dead_or_not = 1;
+				stop_all_thread(obj, tmp);
 				return (0);
 			}
 			else if (tmp->nb_eat == obj->param.nb_philo_eat)
@@ -84,8 +96,11 @@ int	main(int ac, char **av)
 			return (0);
 		if (init_philo(&obj) == 0)
 			return (0);
+		//t-philo
+
 		start_thread(&obj);
 		monitor(&obj);
+		usleep(1000);
 		free_all_philo(&obj);
 		pthread_mutex_destroy(obj.param.display);
 		free(obj.param.display);

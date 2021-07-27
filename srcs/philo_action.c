@@ -2,13 +2,22 @@
 
 static void	philo_take_fork(t_philosopher *philo)
 {
-	if (philo->is_dead == 1)
-		return ;
+	//if (philo->is_dead == 1)
+	//	return ;
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
-	if (philo->is_dead == 1)
+	if (philo->param->dead_or_not == 1)
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return ;
+	}
 	pthread_mutex_lock(philo->param->display);
+	if (philo->param->dead_or_not == 1)
+	{
+		pthread_mutex_unlock(philo->param->display);
+		return ;
+	}
 	printf("%ld ms : philo %ld has taken a fork\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
@@ -18,16 +27,23 @@ static void	philo_eat(t_philosopher *philo)
 {
 	uint64_t	eat;
 
-	if (philo->is_dead == 1)
-		return ;
+	//if (philo->is_dead == 1)
+	//	return ;
 	eat = get_current_time() - philo->param->time_start;
 	if (eat - philo->time_last_eat > philo->param->time_to_die)
 	{
 		philo->is_dead = 1;
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
 	philo->time_last_eat = eat;
 	pthread_mutex_lock(philo->param->display);
+	if (philo->param->dead_or_not == 1)
+	{
+		pthread_mutex_unlock(philo->param->display);
+		return ;
+	}
 	printf("%ld ms : philo %ld is eating\n", philo->time_last_eat,
 		philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
@@ -38,9 +54,14 @@ static void	philo_eat(t_philosopher *philo)
 
 static void	philo_sleep(t_philosopher *philo)
 {
-	if (philo->is_dead == 1)
-		return ;
+	//if (philo->is_dead == 1)
+	//	return ;
 	pthread_mutex_lock(philo->param->display);
+	if (philo->param->dead_or_not == 1)
+	{
+		pthread_mutex_unlock(philo->param->display);
+		return ;
+	}
 	printf("%ld ms : philo %ld is sleeping\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
@@ -49,9 +70,14 @@ static void	philo_sleep(t_philosopher *philo)
 
 static void	philo_think(t_philosopher *philo)
 {
-	if (philo->is_dead == 1)
-		return ;
+	//if (philo->is_dead == 1)
+	//	return ;
 	pthread_mutex_lock(philo->param->display);
+	if (philo->param->dead_or_not == 1)
+	{
+		pthread_mutex_unlock(philo->param->display);
+		return ;
+	}
 	printf("%ld ms : philo %ld is thinking\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
@@ -62,13 +88,14 @@ void	*philo_day(void *phil)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)phil;
+	//printf("deadornot= %d\n", philo->param->dead_or_not);
 	if (philo->param->nb_philo == 1)
 	{
 		usleep(philo->param->time_to_die * 1000);
 		philo->is_dead = 1;
 		return ((void *)0);
 	}
-	while (philo->is_dead == 0)
+	while (philo->param->dead_or_not == 0)
 	{
 		if (philo->param->nb_philo_eat == philo->nb_eat)
 		{
@@ -76,9 +103,17 @@ void	*philo_day(void *phil)
 			break ;
 		}
 		philo->nb_eat++;
+		if (philo->param->dead_or_not == 1)
+			break ;
 		philo_take_fork(philo);
+		if (philo->param->dead_or_not == 1)
+			break ;
 		philo_eat(philo);
+		if (philo->param->dead_or_not == 1)
+			break ;
 		philo_sleep(philo);
+		if (philo->param->dead_or_not == 1)
+			break ;
 		philo_think(philo);
 	}
 	return ((void *)0);

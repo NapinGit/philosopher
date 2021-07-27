@@ -53,6 +53,7 @@ void	set_fork(t_obj *obj)
 	}
 	tmp->param = &obj->param;
 	tmp->right_fork = obj->first->left_fork;
+	//printf("param = %ld\n", tmp->param->nb_philo_eat);
 }
 
 int	init_mutex_fork(t_obj *obj)

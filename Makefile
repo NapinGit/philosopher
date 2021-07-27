@@ -3,7 +3,7 @@ CC = clang
 
 OBJ_DIR = obj/
 SRC_DIR =	$(shell find ./srcs -type d)
-FLAGS	= -pthread -Werror -Wextra -Wall 
+FLAGS	= -pthread -Werror -Wextra -Wall -fsanitize=address -g3
 SRC_PHILO	= get_time.c init_philo.c main.c parsing.c philo_action.c utils.c
 
 OBJ_PHILO	=	$(addprefix $(OBJ_DIR),$(SRC_PHILO:%.c=%.o))

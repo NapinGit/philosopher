@@ -16,6 +16,7 @@ typedef struct s_param
 	uint64_t				nb_philo_eat;
 	uint64_t				time_start;
 	pthread_mutex_t			*display;
+	int						dead_or_not;
 	struct s_philosopher	*next;
 }							t_param;
 
