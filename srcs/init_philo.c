@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_philo.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloiseau <aloiseau@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/09 11:20:19 by aloiseau          #+#    #+#             */
+/*   Updated: 2021/09/09 11:20:19 by aloiseau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosopher.h"
 
 t_philosopher	*ft_philo_new(int nb)
@@ -53,7 +65,6 @@ void	set_fork(t_obj *obj)
 	}
 	tmp->param = &obj->param;
 	tmp->right_fork = obj->first->left_fork;
-	//printf("param = %ld\n", tmp->param->nb_philo_eat);
 }
 
 int	init_mutex_fork(t_obj *obj)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosopher.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloiseau <aloiseau@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/09 11:21:07 by aloiseau          #+#    #+#             */
+/*   Updated: 2021/09/09 11:21:07 by aloiseau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
 # include <stdio.h>
@@ -48,4 +60,5 @@ int			init_philo(t_obj *obj);
 void		*philo_day(void *phil);
 uint64_t	get_current_time(void);
 void		free_all_philo(t_obj *obj);
+void		philo_day2(t_philosopher *philo);
 #endif

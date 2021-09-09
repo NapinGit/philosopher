@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloiseau <aloiseau@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/09 11:20:56 by aloiseau          #+#    #+#             */
+/*   Updated: 2021/09/09 11:20:56 by aloiseau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosopher.h"
 
 uint64_t	get_current_time(void)
@@ -12,6 +24,21 @@ static void	destroy_fork(t_philosopher	*before)
 {
 	pthread_mutex_destroy(before->left_fork);
 	free(before->left_fork);
+}
+
+void	*philo_day(void *phil)
+{
+	t_philosopher	*philo;
+
+	philo = (t_philosopher *)phil;
+	if (philo->param->nb_philo == 1)
+	{
+		usleep(philo->param->time_to_die * 1000);
+		philo->is_dead = 1;
+		return ((void *)0);
+	}
+	philo_day2(philo);
+	return ((void *)0);
 }
 
 void	free_all_philo(t_obj *obj)

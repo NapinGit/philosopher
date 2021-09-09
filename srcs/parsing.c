@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aloiseau <aloiseau@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/09 11:20:32 by aloiseau          #+#    #+#             */
+/*   Updated: 2021/09/09 11:20:32 by aloiseau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosopher.h"
 
 void	ft_bzero(void *s, size_t n)
@@ -75,6 +87,5 @@ int	get_param(t_obj *obj, char **av, int ac)
 		obj->param.nb_philo_eat = -1;
 	if (obj->param.nb_philo < 1 || obj->param.nb_philo > 200)
 		return (0);
-	
 	return (1);
 }
