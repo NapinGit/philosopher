@@ -19,14 +19,15 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <stdint.h>
+
 typedef struct s_param
 {
-	uint64_t				nb_philo;
-	uint64_t				time_to_die;
-	uint64_t				time_to_eat;
-	uint64_t				time_to_sleep;
-	uint64_t				nb_philo_eat;
-	uint64_t				time_start;
+	long long				nb_philo;
+	long long				time_to_die;
+	long long				time_to_eat;
+	long long				time_to_sleep;
+	long long				nb_philo_eat;
+	long long				time_start;
 	pthread_mutex_t			*display;
 	int						dead_or_not;
 	struct s_philosopher	*next;
@@ -34,10 +35,10 @@ typedef struct s_param
 
 typedef struct s_philosopher
 {
-	uint64_t				nb_eat;
+	long long				nb_eat;
 	pthread_t				philo;
-	uint64_t				philo_name;
-	uint64_t				time_last_eat;
+	long long				philo_name;
+	long long				time_last_eat;
 	pthread_mutex_t			*left_fork;
 	pthread_mutex_t			*right_fork;
 	int						is_dead;
@@ -58,7 +59,9 @@ int			parse_int(char **av);
 int			get_param(t_obj *obj, char **av, int ac);
 int			init_philo(t_obj *obj);
 void		*philo_day(void *phil);
-uint64_t	get_current_time(void);
+long long	get_current_time(void);
+void		start_thread2(t_obj *obj);
 void		free_all_philo(t_obj *obj);
 void		philo_day2(t_philosopher *philo);
+void		ft_usleep(long long time, t_param *param);
 #endif

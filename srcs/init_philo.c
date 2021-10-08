@@ -48,7 +48,7 @@ void	ft_philo_add_back(t_philosopher **list, t_philosopher *new)
 
 void	set_fork(t_obj *obj)
 {
-	uint64_t		i;
+	long long		i;
 	t_philosopher	*tmp;
 
 	i = 0;
@@ -69,7 +69,7 @@ void	set_fork(t_obj *obj)
 
 int	init_mutex_fork(t_obj *obj)
 {
-	uint64_t		i;
+	long long		i;
 	t_philosopher	*tmp;
 
 	i = 0;
@@ -90,7 +90,7 @@ int	init_mutex_fork(t_obj *obj)
 
 int	init_philo(t_obj *obj)
 {
-	uint64_t	number;
+	long long	number;
 
 	number = 0;
 	if (number < obj->param.nb_philo)

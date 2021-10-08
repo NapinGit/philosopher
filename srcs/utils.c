@@ -12,12 +12,12 @@
 
 #include "../include/philosopher.h"
 
-uint64_t	get_current_time(void)
+long long	get_current_time(void)
 {
 	static struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * (long long)1000) + (tv.tv_usec / 1000));
 }
 
 static void	destroy_fork(t_philosopher	*before)
@@ -33,7 +33,7 @@ void	*philo_day(void *phil)
 	philo = (t_philosopher *)phil;
 	if (philo->param->nb_philo == 1)
 	{
-		usleep(philo->param->time_to_die * 1000);
+		ft_usleep(philo->param->time_to_die, philo->param);
 		philo->is_dead = 1;
 		return ((void *)0);
 	}

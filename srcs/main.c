@@ -15,15 +15,21 @@
 static void	start_thread(t_obj *obj)
 {
 	t_philosopher	*tmp;
+	long long		i;
 
+	i = 0;
 	obj->param.time_start = get_current_time();
 	tmp = obj->first;
-	while (tmp)
+	while (i < obj->param.nb_philo)
 	{
 		pthread_create(&tmp->philo, NULL, &philo_day, tmp);
-		tmp = tmp->next;
-		usleep(100);
+		if (tmp->next)
+			tmp = tmp->next;
+		if (tmp->next)
+			tmp = tmp->next;
+		i = i + 2;
 	}
+	start_thread2(obj);
 }
 
 void	stop_all_thread(t_obj *obj, t_philosopher *die)
