@@ -23,21 +23,28 @@ long long	get_current_time(void)
 static void	destroy_fork(t_philosopher	*before)
 {
 	pthread_mutex_destroy(before->left_fork);
+	pthread_mutex_destroy(before->stop);
 	free(before->left_fork);
+	free(before->stop);
 }
 
 void	*philo_day(void *phil)
 {
 	t_philosopher	*philo;
+	long long		nb_philo;
 
 	philo = (t_philosopher *)phil;
-	if (philo->param->nb_philo == 1)
+
+	pthread_mutex_lock(philo->param->stop);
+	nb_philo = philo->param->nb_philo_eat;
+	pthread_mutex_unlock(philo->param->stop);
+	if (nb_philo == 1)
 	{
-		ft_usleep(philo->param->time_to_die, philo->param);
+		ft_usleep(philo->param->time_to_die);
 		philo->is_dead = 1;
 		return ((void *)0);
 	}
-	philo_day2(philo);
+	philo_day2(philo, nb_philo);
 	return ((void *)0);
 }
 

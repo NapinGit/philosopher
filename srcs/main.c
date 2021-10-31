@@ -15,21 +15,24 @@
 static void	start_thread(t_obj *obj)
 {
 	t_philosopher	*tmp;
+	long long		nb_philo;
 	long long		i;
 
 	i = 0;
+	nb_philo = obj->param.nb_philo;
 	obj->param.time_start = get_current_time();
 	tmp = obj->first;
-	while (i < obj->param.nb_philo)
+	while (i < nb_philo)
 	{
 		pthread_create(&tmp->philo, NULL, &philo_day, tmp);
+		//pthread_detach(tmp->philo);
 		if (tmp->next)
 			tmp = tmp->next;
 		if (tmp->next)
 			tmp = tmp->next;
 		i = i + 2;
 	}
-	start_thread2(obj);
+	start_thread2(obj, nb_philo);
 }
 
 void	stop_all_thread(t_obj *obj, t_philosopher *die)
@@ -62,29 +65,55 @@ int	check_all_stopped(t_obj *obj)
 	return (0);
 }
 
-int	monitor(t_obj *obj)
+void	all_dead(t_obj *obj)
 {
 	t_philosopher	*tmp;
 
+	tmp = obj->first;
+	while(tmp)
+	{
+		pthread_mutex_lock(tmp->stop);
+		tmp->is_dead = 1;
+		pthread_mutex_unlock(tmp->stop);
+		tmp = tmp->next;
+	}
+}
+
+int	monitor(t_obj *obj)
+{
+	t_philosopher	*tmp;
+	long long nb_philo_eat;
+
+	pthread_mutex_lock(obj->param.stop);
+	nb_philo_eat = obj->param.nb_philo_eat;
+	pthread_mutex_unlock(obj->param.stop);
 	while (1)
 	{
 		tmp = obj->first;
 		while (tmp)
 		{
+			pthread_mutex_lock(tmp->stop);
 			if (tmp->is_dead == 1)
 			{
-				obj->param.dead_or_not = 1;
+				pthread_mutex_unlock(tmp->stop);
+				all_dead(obj);
+				//pthread_mutex_lock(tmp->stop);
+				//obj->param.dead_or_not = 1;
+				//pthread_mutex_unlock(tmp->stop);
 				stop_all_thread(obj, tmp);
 				return (0);
 			}
-			else if (tmp->nb_eat == obj->param.nb_philo_eat)
+			else if (tmp->nb_eat == nb_philo_eat)
 			{
+				pthread_mutex_unlock(tmp->stop);
 				if (check_all_stopped(obj) == 0)
 				{
 					pthread_mutex_lock(obj->param.display);
+					
 					return (0);
 				}
 			}
+			pthread_mutex_unlock(tmp->stop);
 			tmp = tmp->next;
 		}
 	}
@@ -106,10 +135,13 @@ int	main(int ac, char **av)
 			return (0);
 		start_thread(&obj);
 		monitor(&obj);
-		usleep(1000);
+		usleep(100000);
 		free_all_philo(&obj);
+		//pthread_mutex_unlock(obj.param.display);
 		pthread_mutex_destroy(obj.param.display);
+		pthread_mutex_destroy(obj.param.stop);
 		free(obj.param.display);
+		free(obj.param.stop);
 	}
 	return (0);
 }

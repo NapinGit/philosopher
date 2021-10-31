@@ -12,14 +12,14 @@
 
 #include "../include/philosopher.h"
 
-void	start_thread2(t_obj *obj)
+void	start_thread2(t_obj *obj, long long nb_philo)
 {
 	long long		i;
 	t_philosopher	*tmp;
 
 	i = 1;
 	tmp = obj->first->next;
-	while (i < obj->param.nb_philo && tmp)
+	while (i < nb_philo && tmp)
 	{
 		pthread_create(&tmp->philo, NULL, &philo_day, tmp);
 		if (tmp->next)
@@ -30,12 +30,12 @@ void	start_thread2(t_obj *obj)
 	}
 }
 
-void	ft_usleep(long long time, t_param *param)
+void	ft_usleep(long long time)
 {
 	long long	i;
 
 	i = get_current_time();
-	while (param->dead_or_not == 0)
+	while (1)
 	{
 		if ((get_current_time() - i) >= time)
 		{

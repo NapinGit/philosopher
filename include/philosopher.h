@@ -29,6 +29,7 @@ typedef struct s_param
 	long long				nb_philo_eat;
 	long long				time_start;
 	pthread_mutex_t			*display;
+	pthread_mutex_t			*stop;
 	int						dead_or_not;
 	struct s_philosopher	*next;
 }							t_param;
@@ -45,6 +46,7 @@ typedef struct s_philosopher
 	int						done;
 	struct s_param			*param;
 	struct s_philosopher	*next;
+	pthread_mutex_t			*stop;
 }							t_philosopher;
 
 typedef struct s_obj
@@ -60,8 +62,8 @@ int			get_param(t_obj *obj, char **av, int ac);
 int			init_philo(t_obj *obj);
 void		*philo_day(void *phil);
 long long	get_current_time(void);
-void		start_thread2(t_obj *obj);
+void		start_thread2(t_obj *obj, long long nb_philo);
 void		free_all_philo(t_obj *obj);
-void		philo_day2(t_philosopher *philo);
-void		ft_usleep(long long time, t_param *param);
+void		philo_day2(t_philosopher *philo, long long nb_philo_eat);
+void		ft_usleep(long long time);
 #endif
