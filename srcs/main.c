@@ -56,12 +56,27 @@ int	check_all_stopped(t_obj *obj)
 	t_philosopher	*tmp;
 
 	tmp = obj->first;
-	while (tmp && tmp->done == 1)
+	while (tmp)
 	{
+		pthread_mutex_lock(tmp->stop);
+		if (tmp->done == 0)
+		{
+			pthread_mutex_unlock(tmp->stop);
+			break;
+		}
+		pthread_mutex_unlock(tmp->stop);
 		tmp = tmp->next;
 	}
-	if (tmp && tmp->done == 0)
-		return (1);
+	if (tmp)
+	{
+		pthread_mutex_lock(tmp->stop);
+		if (tmp && tmp->done == 0)
+		{
+			pthread_mutex_unlock(tmp->stop);
+			return (1);
+		}
+		pthread_mutex_unlock(tmp->stop);
+	}
 	return (0);
 }
 
@@ -75,6 +90,18 @@ void	all_dead(t_obj *obj)
 		pthread_mutex_lock(tmp->stop);
 		tmp->is_dead = 1;
 		pthread_mutex_unlock(tmp->stop);
+		tmp = tmp->next;
+	}
+}
+
+void	join_when_eat(t_obj *obj)
+{
+	t_philosopher *tmp;
+
+	tmp = obj->first;
+	while (tmp)
+	{
+		pthread_join(tmp->philo, NULL);
 		tmp = tmp->next;
 	}
 }
@@ -103,17 +130,19 @@ int	monitor(t_obj *obj)
 				stop_all_thread(obj, tmp);
 				return (0);
 			}
-			else if (tmp->nb_eat == nb_philo_eat)
+			if (tmp->nb_eat == nb_philo_eat)
 			{
 				pthread_mutex_unlock(tmp->stop);
 				if (check_all_stopped(obj) == 0)
 				{
-					pthread_mutex_lock(obj->param.display);
-					
+					join_when_eat(obj);
+					//necessite des join maintenant
+					//pthread_mutex_lock(obj->param.display);
 					return (0);
 				}
 			}
-			pthread_mutex_unlock(tmp->stop);
+			else
+				pthread_mutex_unlock(tmp->stop);
 			tmp = tmp->next;
 		}
 	}
@@ -125,7 +154,7 @@ int	main(int ac, char **av)
 	t_obj	obj;
 
 	ft_bzero(&obj, sizeof(t_obj));
-	if (ac == 5 || ac == 6)
+ 	if (ac == 5 || ac == 6)
 	{
 		if (parse_int(av) == 0)
 			return (0);
