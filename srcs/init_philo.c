@@ -93,6 +93,21 @@ int	init_mutex_fork(t_obj *obj)
 	return (1);
 }
 
+int	create_mutex(t_obj *obj)
+{
+	obj->param.display = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (obj->param.display == NULL)
+		return (0);
+	obj->param.stop = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (obj->param.stop == NULL)
+		return (0);
+	if (pthread_mutex_init(obj->param.stop, NULL))
+		return (0);
+	if (pthread_mutex_init(obj->param.display, NULL))
+		return (0);
+	return (1);
+}
+
 int	init_philo(t_obj *obj)
 {
 	long long	number;
@@ -110,15 +125,7 @@ int	init_philo(t_obj *obj)
 		if (init_mutex_fork(obj) == 0)
 			return (0);
 	}
-	obj->param.display = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (obj->param.display == NULL)
-		return (0);
-	obj->param.stop = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (obj->param.stop == NULL)
-		return (0);
-	if (pthread_mutex_init(obj->param.stop, NULL))
-		return (0);
-	if (pthread_mutex_init(obj->param.display, NULL))
+	if (create_mutex(obj) == 0)
 		return (0);
 	return (1);
 }
