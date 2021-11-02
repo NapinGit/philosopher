@@ -34,7 +34,6 @@ void	*philo_day(void *phil)
 	long long		nb_philo;
 
 	philo = (t_philosopher *)phil;
-
 	pthread_mutex_lock(philo->param->stop);
 	nb_philo = philo->param->nb_philo_eat;
 	pthread_mutex_unlock(philo->param->stop);

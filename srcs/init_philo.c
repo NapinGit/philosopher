@@ -113,11 +113,9 @@ int	init_philo(t_obj *obj)
 	obj->param.display = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (obj->param.display == NULL)
 		return (0);
-	//
 	obj->param.stop = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (obj->param.stop == NULL)
 		return (0);
-	//
 	if (pthread_mutex_init(obj->param.stop, NULL))
 		return (0);
 	if (pthread_mutex_init(obj->param.display, NULL))

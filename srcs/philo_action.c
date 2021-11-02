@@ -114,7 +114,7 @@ static void	philo_think(t_philosopher *philo)
 	pthread_mutex_unlock(philo->param->display);
 }
 
-void	philo_day2(t_philosopher *philo,long long nb_philo_eat)
+void	philo_day2(t_philosopher *philo, long long nb_philo_eat)
 {
 	while (1)
 	{
@@ -147,7 +147,6 @@ void	philo_day2(t_philosopher *philo,long long nb_philo_eat)
 		pthread_mutex_unlock(philo->stop);
 		philo_think(philo);
 	}
-	//sauf
 	pthread_mutex_unlock(philo->stop);
 	return ;
 }

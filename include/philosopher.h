@@ -66,4 +66,5 @@ void		start_thread2(t_obj *obj, long long nb_philo);
 void		free_all_philo(t_obj *obj);
 void		philo_day2(t_philosopher *philo, long long nb_philo_eat);
 void		ft_usleep(long long time);
+int	monitor(t_obj *obj);
 #endif
