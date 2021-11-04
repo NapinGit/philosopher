@@ -12,22 +12,6 @@
 
 #include "../include/philosopher.h"
 
-t_philosopher	*ft_philo_new(int nb)
-{
-	t_philosopher	*lst;
-
-	lst = (t_philosopher *)malloc(sizeof(t_philosopher));
-	if (lst == NULL)
-		return (NULL);
-	lst->next = NULL;
-	lst->philo_name = nb;
-	lst->is_dead = 0;
-	lst->time_last_eat = 0;
-	lst->nb_eat = 0;
-	lst->done = 0;
-	return (lst);
-}
-
 void	ft_philo_add_back(t_philosopher **list, t_philosopher *new)
 {
 	t_philosopher	*tmp;

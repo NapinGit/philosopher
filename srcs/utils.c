@@ -31,19 +31,25 @@ static void	destroy_fork(t_philosopher	*before)
 void	*philo_day(void *phil)
 {
 	t_philosopher	*philo;
+	long long		nb_philo_eat;
 	long long		nb_philo;
 
 	philo = (t_philosopher *)phil;
 	pthread_mutex_lock(philo->param->stop);
-	nb_philo = philo->param->nb_philo_eat;
+	nb_philo = philo->param->nb_philo;
+	nb_philo_eat = philo->param->nb_philo_eat;
 	pthread_mutex_unlock(philo->param->stop);
 	if (nb_philo == 1)
 	{
+		printf("%llu ms : philo %llu has taken a fork\n", get_current_time()
+			- philo->param->time_start, philo->philo_name);
 		ft_usleep(philo->param->time_to_die);
+		pthread_mutex_lock(philo->stop);
 		philo->is_dead = 1;
+		pthread_mutex_unlock(philo->stop);
 		return ((void *)0);
 	}
-	philo_day2(philo, nb_philo);
+	philo_day2(philo, nb_philo_eat);
 	return ((void *)0);
 }
 
@@ -67,7 +73,25 @@ void	free_all_philo(t_obj *obj)
 		tmp = before->next;
 	}
 	if (before->left_fork != NULL)
+	{
 		destroy_fork(before);
+	}
 	free(before);
 	free(tmp);
+}
+
+t_philosopher	*ft_philo_new(int nb)
+{
+	t_philosopher	*lst;
+
+	lst = (t_philosopher *)malloc(sizeof(t_philosopher));
+	if (lst == NULL)
+		return (NULL);
+	lst->next = NULL;
+	lst->philo_name = nb;
+	lst->is_dead = 0;
+	lst->time_last_eat = 0;
+	lst->nb_eat = 0;
+	lst->done = 0;
+	return (lst);
 }
