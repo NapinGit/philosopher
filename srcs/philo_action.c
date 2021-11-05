@@ -42,7 +42,8 @@ void	philo_sleep(t_philosopher *philo)
 	printf("%llu ms : philo %llu is sleeping\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
-	usleep(philo->param->time_to_sleep * 1000);
+	ft_usleep(philo->param->time_to_sleep, philo->param->time_start);
+	//usleep(philo->param->time_to_sleep * 1000);
 	philo_think(philo);
 }
 

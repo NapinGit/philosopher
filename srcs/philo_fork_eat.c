@@ -28,7 +28,8 @@ static void	philo_eat_2(t_philosopher *philo)
 	printf("%llu ms : philo %llu is eating\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
-	usleep(philo->param->time_to_eat * 1000);
+	ft_usleep(philo->param->time_to_eat, philo->param->time_start);
+	//usleep(philo->param->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 	philo_sleep(philo);
