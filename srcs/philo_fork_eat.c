@@ -25,17 +25,18 @@ static void	philo_eat_2(t_philosopher *philo)
 		return ;
 	}
 	pthread_mutex_unlock(philo->stop);
-	printf("%llu ms : philo %llu is eating\n", philo->time_last_eat,
-		philo->philo_name);
+	printf("%llu ms : philo %llu is eating\n", get_current_time()
+		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
-	ft_usleep(philo->param->time_to_eat);
+	usleep(philo->param->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	philo_sleep(philo);
 }
 
 static void	philo_eat(t_philosopher *philo)
 {
-	long long	eat;
+	uint64_t	eat;
 
 	eat = get_current_time() - philo->param->time_start;
 	if (eat - philo->time_last_eat > philo->param->time_to_die)

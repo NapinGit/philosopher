@@ -43,10 +43,12 @@ void	*philo_day(void *phil)
 	{
 		printf("%llu ms : philo %llu has taken a fork\n", get_current_time()
 			- philo->param->time_start, philo->philo_name);
-		ft_usleep(philo->param->time_to_die);
+		pthread_mutex_lock(philo->left_fork);
+		usleep(philo->param->time_to_die * 1000);
 		pthread_mutex_lock(philo->stop);
 		philo->is_dead = 1;
 		pthread_mutex_unlock(philo->stop);
+		pthread_mutex_unlock(philo->left_fork);
 		return ((void *)0);
 	}
 	philo_day2(philo, nb_philo_eat);

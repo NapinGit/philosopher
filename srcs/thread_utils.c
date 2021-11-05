@@ -26,21 +26,16 @@ void	start_thread2(t_obj *obj, long long nb_philo)
 			tmp = tmp->next;
 		if (tmp->next)
 			tmp = tmp->next;
+		usleep(1000);
 		i = i + 2;
 	}
 }
 
-void	ft_usleep(long long time)
+void	ft_usleep(uint64_t time, uint64_t time_start)
 {
-	long long	i;
+	uint64_t	end;
 
-	i = get_current_time();
-	while (1)
-	{
-		if ((get_current_time() - i) >= time)
-		{
-			break ;
-		}
-		usleep(5);
-	}
+	end = get_current_time() - time_start + time;
+	while (get_current_time() - time_start < end)
+		usleep(10);
 }

@@ -29,6 +29,7 @@ static void	start_thread(t_obj *obj)
 			tmp = tmp->next;
 		if (tmp->next)
 			tmp = tmp->next;
+		usleep(1000);
 		i = i + 2;
 	}
 	start_thread2(obj, nb_philo);
@@ -69,6 +70,7 @@ int	monitor(t_obj *obj, long long nb_philo_eat)
 				pthread_mutex_unlock(tmp->stop);
 			tmp = tmp->next;
 		}
+		usleep(10);
 	}
 	return (0);
 }
@@ -92,7 +94,7 @@ int	main(int ac, char **av)
 		nb_philo_eat = obj.param.nb_philo_eat;
 		pthread_mutex_unlock(obj.param.stop);
 		monitor(&obj, nb_philo_eat);
-		usleep(100000);
+		usleep(1000);
 		free_all_philo(&obj);
 		pthread_mutex_destroy(obj.param.display);
 		pthread_mutex_destroy(obj.param.stop);
