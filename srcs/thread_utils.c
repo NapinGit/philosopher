@@ -17,7 +17,7 @@ void	start_thread2(t_obj *obj, long long nb_philo)
 	long long		i;
 	t_philosopher	*tmp;
 
-	i = 1;
+	i = 0;
 	tmp = obj->first->next;
 	while (i < nb_philo && tmp)
 	{
@@ -26,7 +26,7 @@ void	start_thread2(t_obj *obj, long long nb_philo)
 			tmp = tmp->next;
 		if (tmp->next)
 			tmp = tmp->next;
-		usleep(1000);
+		usleep(100);
 		i = i + 2;
 	}
 }

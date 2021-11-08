@@ -23,9 +23,10 @@ static void	philo_think(t_philosopher *philo)
 		return ;
 	}
 	pthread_mutex_unlock(philo->stop);
-	printf("%llu ms : philo %llu is thinking\n", get_current_time()
+	printf("%llu ms : %llu is thinking\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
+	//usleep(100);
 }
 
 void	philo_sleep(t_philosopher *philo)
@@ -39,7 +40,7 @@ void	philo_sleep(t_philosopher *philo)
 		return ;
 	}
 	pthread_mutex_unlock(philo->stop);
-	printf("%llu ms : philo %llu is sleeping\n", get_current_time()
+	printf("%llu ms : %llu is sleeping\n", get_current_time()
 		- philo->param->time_start, philo->philo_name);
 	pthread_mutex_unlock(philo->param->display);
 	ft_usleep(philo->param->time_to_sleep, philo->param->time_start);

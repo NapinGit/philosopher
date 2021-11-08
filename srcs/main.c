@@ -12,7 +12,7 @@
 
 #include "../include/philosopher.h"
 
-static void	start_thread(t_obj *obj)
+/*static void	start_thread(t_obj *obj)
 {
 	t_philosopher	*tmp;
 	long long		nb_philo;
@@ -29,10 +29,31 @@ static void	start_thread(t_obj *obj)
 			tmp = tmp->next;
 		if (tmp->next)
 			tmp = tmp->next;
-		usleep(1000);
+		usleep(100);
 		i = i + 2;
 	}
 	start_thread2(obj, nb_philo);
+}*/
+
+static void	start_thread(t_obj *obj)
+{
+	t_philosopher	*tmp;
+	long long		nb_philo;
+	long long		i;
+
+	i = 0;
+	nb_philo = obj->param.nb_philo;
+	obj->param.time_start = get_current_time();
+	tmp = obj->first;
+	while (i < nb_philo)
+	{
+		pthread_create(&tmp->philo, NULL, &philo_day, tmp);
+		if (tmp->next)
+			tmp = tmp->next;
+		usleep(100);
+		i++;
+	}
+	//start_thread2(obj, nb_philo);
 }
 
 void	join_when_eat(t_obj *obj)
@@ -50,6 +71,7 @@ void	join_when_eat(t_obj *obj)
 int	monitor(t_obj *obj, long long nb_philo_eat)
 {
 	t_philosopher	*tmp;
+	uint64_t		eat;
 
 	while (1)
 	{
@@ -57,13 +79,13 @@ int	monitor(t_obj *obj, long long nb_philo_eat)
 		while (tmp)
 		{
 			pthread_mutex_lock(tmp->stop);
-			if (tmp->is_dead == 1)
+			eat = get_current_time() - tmp->param->time_start;
+			if (eat - tmp->time_last_eat > tmp->param->time_to_die && tmp->nb_eat != nb_philo_eat)
 				if (monitor_2(obj, tmp) == 0)
 					return (0);
 			if (tmp->nb_eat == nb_philo_eat)
 			{
-				pthread_mutex_unlock(tmp->stop);
-				if (monitor_3(obj) == 0)
+				if (monitor_3(obj, tmp) == 0)
 					return (0);
 			}
 			else

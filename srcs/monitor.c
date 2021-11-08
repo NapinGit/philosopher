@@ -18,7 +18,7 @@ void	stop_all_thread(t_obj *obj, t_philosopher *die)
 
 	tmp = obj->first;
 	pthread_mutex_lock(obj->param.display);
-	printf("%llu ms : philo %llu is dead\n", get_current_time()
+	printf("%llu ms : %llu is dead\n", get_current_time()
 		- tmp->param->time_start, die->philo_name);
 	pthread_mutex_unlock(obj->param.display);
 	while (tmp)
@@ -79,8 +79,9 @@ int	monitor_2(t_obj *obj, t_philosopher *tmp)
 	return (0);
 }
 
-int	monitor_3(t_obj *obj)
+int	monitor_3(t_obj *obj, t_philosopher *tmp)
 {
+	pthread_mutex_unlock(tmp->stop);
 	if (check_all_stopped(obj) == 0)
 	{
 		join_when_eat(obj);
