@@ -62,7 +62,6 @@ int				get_param(t_obj *obj, char **av, int ac);
 int				init_philo(t_obj *obj);
 void			*philo_day(void *phil);
 long long		get_current_time(void);
-void			start_thread2(t_obj *obj, long long nb_philo);
 void			free_all_philo(t_obj *obj);
 void			philo_day2(t_philosopher *philo, long long nb_philo_eat);
 void			ft_usleep(uint64_t time, uint64_t time_start);
@@ -72,4 +71,5 @@ void			join_when_eat(t_obj *obj);
 void			philo_take_fork(t_philosopher *philo);
 t_philosopher	*ft_philo_new(int nb);
 void			philo_sleep(t_philosopher *philo);
+void			philo_eat(t_philosopher *philo);
 #endif

@@ -5,7 +5,7 @@ OBJ_DIR = obj/
 SRC_DIR =	$(shell find ./srcs -type d)
 # -fsanitize=address -g3
 FLAGS	= -pthread -Werror -Wextra -Wall
-SRC_PHILO	= thread_utils.c init_philo.c main.c parsing.c philo_action.c utils.c monitor.c philo_fork_eat.c
+SRC_PHILO	= thread_utils.c init_philo.c main.c parsing.c philo_action.c utils.c monitor.c philo_eat.c philo_fork.c
 
 OBJ_PHILO	=	$(addprefix $(OBJ_DIR),$(SRC_PHILO:%.c=%.o))
 vpath %.c $(SRC_DIR)
