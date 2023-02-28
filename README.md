@@ -1,4 +1,4 @@
-# philosopher
+# Philosopher
 This project was made in C.
 this program need some information like number of philosopher, time to eat, time to sleep, time to die.
 Every philosopher need to eat then sleep, and if they werent able to eat before the time to die has passed, the program would stop. in other situation it could simply run to infinite.
